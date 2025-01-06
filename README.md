@@ -1,11 +1,13 @@
+ # LET'S GET HIRED AS FULL-STACK ENGINEER
 
-# Personal Blog Web App
+# Week-1 : Personal Blog Web App
 
 ## Overview
 
 The **Personal Blog Web App** is a full-stack web application for creating, sharing, and interacting with blog posts. Users can create an account, write and publish articles, and participate in discussions through comments. Visitors can browse, search, and engage with the content. The project emphasizes user-friendly design, robust functionality, and secure authentication.
 
 ---
+
 
 ## Key Features
 
