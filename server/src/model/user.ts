@@ -4,10 +4,38 @@ export const userRouter = express.Router();
 
 
 userRouter.post('/register', (req, res) => {
-    console.log(req.body);
-    res.json("user signup");
+    const {email, password} = req.body();
+
+    //add user to db
+    if(!email || !password){    
+        res.status(400).json({error: "email or password is missing"})
+        return;
+    }
+
+    try{
+        //add user to db
+        res.json("user registered")
+    }
+    catch(err){
+        res.status(500).json("error registering user")
+    }
+
 })
 
 userRouter.post('login', (req, res) => {
-    res.json("user login")
+    const {email, password} = req.body();
+
+    //add user to db
+    if(!email || !password){    
+        res.status(400).json({error: "email or password is missing"})
+        return;
+    }
+
+    try{
+        //add user to db
+        res.json("user logged in")
+    }
+    catch(err){
+        res.status(500).json("error logging in user")
+    }
 })
