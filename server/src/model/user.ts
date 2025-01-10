@@ -33,7 +33,7 @@ userRouter.post('login', (req, res) => {
 
     try{
         //add user to db
-        res.json("user logged in")
+        res.json("user sign in")
     }
     catch(err){
         res.status(500).json("error logging in user")
