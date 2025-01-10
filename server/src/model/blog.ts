@@ -1,5 +1,6 @@
 
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -8,14 +9,28 @@ export const blogRouter = express.Router();
 //endpoint for blog
 blogRouter.post('/create', async(req, res) => {
 
-     const user = req.params;
-    const {title, description, content} = req.body;
 
-     if(!title || !description || !content){
-        res.status(400).json({message: "title, description and content are required"});
-     }
+      const token = req.headers.authorization?.split(' ')[1];
+      if(!token){
+          res.status(401).json({message: "token is missing"})
+      }
+
+      const decoded = jwt.verify(token as string, process.env.JWT_SECRET!);
+      const userId = (decoded as any).id;
+   
+      if(!userId){
+          res.status(401).json({
+            message: "token is invalid"
+          })
+      }
+    
 
      try{
+        const {title, description, content} = req.body;
+        if(!title || !description || !content){
+            res.status(400).json({message: "title, description and content are required"});
+        }
+
          const blog = await prisma.post.create({
              data: {
                 title: title,
@@ -24,7 +39,7 @@ blogRouter.post('/create', async(req, res) => {
                 author:{
                     connect: {
                      //connect to user table and get user id
-                        id : parseInt(user.id)
+                        id : userId
                     }   
                 }
              }
