@@ -11,10 +11,10 @@ userRouter.post('/register', (req, res) => {
         res.status(400).json({error: "email or password is missing"})
         return;
     }
-
+  
     try{
         //add user to db
-        res.json("user registered")
+        res.json("user signed up")
     }
     catch(err){
         res.status(500).json("error registering user")
