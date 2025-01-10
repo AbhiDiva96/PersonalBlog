@@ -8,8 +8,8 @@ app.use(express.json())
 
 const PORT = 3000;
 
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/blogs', blogRouter);
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/blog', blogRouter);
 
 app.get( '/' , (req, res) => {
      res.json("hii there")
