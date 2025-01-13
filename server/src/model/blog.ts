@@ -55,7 +55,7 @@ blogRouter.post('/create', async(req, res) => {
      }
 })
 
-blogRouter.get('/blog/bulk', async(req, res) => {
+blogRouter.get('/bulk', async(req, res) => {
       
        try{
             const blogs = await prisma.post.findMany();

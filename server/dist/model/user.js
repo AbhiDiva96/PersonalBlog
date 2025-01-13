@@ -26,8 +26,10 @@ exports.userRouter.post('/register', (req, res) => __awaiter(void 0, void 0, voi
         res.status(400).json({ error: "email or password is missing" });
         return;
     }
+    console.log(email, password);
     try {
         //add user to db
+        console.log(email, password);
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
         const user = yield prisma.user.create({
             data: {
@@ -35,7 +37,10 @@ exports.userRouter.post('/register', (req, res) => __awaiter(void 0, void 0, voi
                 password: hashedPassword,
             }
         });
-        res.status(201).json(user);
+        res.status(200).json({
+            message: "user registered successfully",
+            user: user
+        });
     }
     catch (err) {
         res.status(500).json("error registering user");
@@ -65,7 +70,9 @@ exports.userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0
             return;
         }
         //jwt token
-        const token = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_SECRET);
+        const token = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_SECRET, {
+            expiresIn: "1d"
+        });
         res.status(200).json({
             token: token,
         });

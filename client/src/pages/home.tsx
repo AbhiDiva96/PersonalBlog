@@ -15,6 +15,7 @@ export default function home() {
             </div>
               <div >
                  <Blogs />
+
               </div>
             <div>
                 footer

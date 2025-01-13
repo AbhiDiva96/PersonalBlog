@@ -17,10 +17,11 @@ userRouter.post('/register', async (req, res) => {
         res.status(400).json({error: "email or password is missing"})
         return;
     }
-  
+  console.log(email, password);
+
     try{
         //add user to db
-
+    console.log(email, password);
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
@@ -30,7 +31,10 @@ userRouter.post('/register', async (req, res) => {
             }
         })
         
-        res.status(201).json(user);
+        res.status(200).json({
+            message: "user registered successfully",
+            user: user
+        })
 
     }
     catch(err){

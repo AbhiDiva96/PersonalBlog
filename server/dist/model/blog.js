@@ -14,16 +14,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 exports.blogRouter = express_1.default.Router();
 //endpoint for blog
 exports.blogRouter.post('/create', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, description, content } = req.body;
-    if (!title || !description || !content) {
-        res.status(400).json({ message: "title, description and content are required" });
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+    if (!token) {
+        res.status(401).json({ message: "token is missing" });
+    }
+    const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+    if (!userId) {
+        res.status(401).json({
+            message: "token is invalid"
+        });
     }
     try {
+        const { title, description, content } = req.body;
+        if (!title || !description || !content) {
+            res.status(400).json({ message: "title, description and content are required" });
+        }
         const blog = yield prisma.post.create({
             data: {
                 title: title,
@@ -32,7 +45,7 @@ exports.blogRouter.post('/create', (req, res) => __awaiter(void 0, void 0, void 
                 author: {
                     connect: {
                         //connect to user table and get user id
-                        id: 1
+                        id: userId
                     }
                 }
             }
@@ -46,15 +59,79 @@ exports.blogRouter.post('/create', (req, res) => __awaiter(void 0, void 0, void 
         res.status(500).json({ message: "error creating blog" });
     }
 }));
-exports.blogRouter.get('/blog', (req, res) => {
-    res.json("blog list");
-});
-exports.blogRouter.get('/blog/:id', (req, res) => {
-    res.json("blog detail");
-});
-exports.blogRouter.put('/blog/:id', (req, res) => {
-    res.json("blog update");
-});
-exports.blogRouter.delete('/blog/:id', (req, res) => {
-    res.json("blog delete");
-});
+exports.blogRouter.get('/bulk', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const blogs = yield prisma.post.findMany();
+        res.status(200).json({
+            message: "bulk blog fetched successfully",
+            blogs: blogs
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: "error getting blogs" });
+    }
+}));
+exports.blogRouter.get('/blog/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const blog = yield prisma.post.findUnique({
+            where: {
+                id: parseInt(id)
+            }
+        });
+        res.status(200).json({
+            message: "blog fetched successfully",
+            blog: blog
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: "error getting blog" });
+    }
+}));
+exports.blogRouter.put('/blog/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { title, description, content } = req.body;
+    if (!title || !description || !content) {
+        res.status(400).json({ message: "title, description and content are required" });
+    }
+    try {
+        const updatedBlog = yield prisma.post.update({
+            where: {
+                id: parseInt(id)
+            },
+            data: {
+                title: title,
+                description: description,
+                content: content
+            }
+        });
+        res.status(200).json({
+            message: "blog updated successfully",
+            blog: updatedBlog
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "error updating blog"
+        });
+    }
+}));
+exports.blogRouter.delete('/blog/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const deletedBlog = yield prisma.post.delete({
+            where: {
+                id: parseInt(id)
+            }
+        });
+        res.status(200).json({
+            message: "blog deleted successfully",
+            blog: deletedBlog
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "error deleting blog"
+        });
+    }
+}));
