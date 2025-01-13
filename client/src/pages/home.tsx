@@ -1,3 +1,6 @@
+import { BlogContainer } from "../components/blogContainer";
+import { Search } from "../components/search";
+import Blogs from "./blogs";
 import { Header } from "./header";
 
 
@@ -8,8 +11,11 @@ export default function home() {
                  <Header />
             </div>
             <div>
-                main
+                <Search />
             </div>
+              <div >
+                 <Blogs />
+              </div>
             <div>
                 footer
             </div>

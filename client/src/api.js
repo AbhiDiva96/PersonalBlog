@@ -1,0 +1,7 @@
+
+const url = "http://localhost:3000/api/v1"
+
+export const api = async () => {
+      const response = await fetch(url)
+      return response.json()
+}   
