@@ -37,7 +37,7 @@ export default function Blogs() {
       {!loading && !error && blogs.length === 0 && <div>No blogs available.</div>}
 
       {!loading && !error && blogs.map((blog) => (
-        <BlogContainer key={blog.id} title={blog.title} description={blog.description} />
+        <BlogContainer key={blog.id} id={blog.id} title={blog.title} description={blog.description} />
       ))}
   
     </div>

@@ -69,14 +69,15 @@ blogRouter.get('/bulk', async(req, res) => {
        }
 })
 
-blogRouter.get('/blog/:id', async(req, res) => {
+blogRouter.get('/article/:id', async(req, res) => {
 
      const {id} = req.params;
 
      try{
           const blog = await prisma.post.findUnique({
              where: {
-                 id: parseInt(id)
+                 id: parseInt(id),
+                 published: true
              }
           })
 

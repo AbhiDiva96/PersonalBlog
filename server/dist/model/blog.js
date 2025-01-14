@@ -71,7 +71,7 @@ exports.blogRouter.get('/bulk', (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(500).json({ message: "error getting blogs" });
     }
 }));
-exports.blogRouter.get('/blog/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.blogRouter.get('/article/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
         const blog = yield prisma.post.findUnique({
