@@ -21,7 +21,7 @@ export const BlogContainer = ({id, title, description }: BlogContainerProps) => 
         <div className="w-full md:w-2/3">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">{title}</h1>
           <p className="text-lg text-gray-600 mb-4">{description}</p>
-                    <a
+              <a
             href={`/article/${id}`} // Dynamically construct the URL with the article ID
             className="inline-block text-blue-600 font-semibold hover:text-blue-800 transition duration-300"
             >

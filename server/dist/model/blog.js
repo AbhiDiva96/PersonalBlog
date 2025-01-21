@@ -76,7 +76,8 @@ exports.blogRouter.get('/article/:id', (req, res) => __awaiter(void 0, void 0, v
     try {
         const blog = yield prisma.post.findUnique({
             where: {
-                id: parseInt(id)
+                id: parseInt(id),
+                published: true
             }
         });
         res.status(200).json({
